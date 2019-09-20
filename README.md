@@ -1,7 +1,7 @@
 [![Build Status](https://dev.azure.com/AzureDisaster/Wheel%20Of%20Fortune/_apis/build/status/azureDisaster.wheel_of_fortune?branchName=master)](https://dev.azure.com/AzureDisaster/Wheel%20Of%20Fortune/_build/latest?definitionId=1&branchName=master)
 
 # Wheel of Fortune
-A basic wheel of fortune console app!
+A basic wheel of fortune console app! Version 2.0!
 
 ## Getting Started
 Fork this repo and clone it locally. Open the file called 'WheelOfFortune.sln' in Visual Studio. Once you click run, the game will begin.
