@@ -1,0 +1,87 @@
+
+=WOFClassLib.Player.GuessLetter(char, WOFClassLib.Puzzle, int)N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.cs: :("0*Å
+0·
+´
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.cs= =(
+
+%0bool""object.operator ==(object, object)*
+"
+object*
+
+puzzleWOFClassLib.Puzzle*
+""*
+1
+2*ì
+1•’
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.cs? ?(?"
+%1System.ArgumentNullException"System.ArgumentNullExceptionÉ
+Æ
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.cs? ?(/
+
+%2void":System.ArgumentNullException.ArgumentNullException(string)*$
+"
+%1System.ArgumentNullException*
+""*
+3*
+2*
+4
+5*×
+4¢Ÿ
+O
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.csC C(‹(
+%3"System.ArgumentOutOfRangeException""System.ArgumentOutOfRangeException§
+¤
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.csC C(5
+
+%4void"NSystem.ArgumentOutOfRangeException.ArgumentOutOfRangeException(string, string)**
+(
+%3"System.ArgumentOutOfRangeException*
+""*B@
+>Argument out of range, should be greater than or equal to zero*
+3*„
+5¦
+£
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.csH H(0	
+%5int"WOFClassLib.Puzzle.Guess(char)*
+
+puzzleWOFClassLib.Puzzle*
+""x
+v
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.csH H(0
+
+numLettersint"__id*
+	
+%5intf
+d
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.csI I(
+%6"__id*
+""Œ
+‰
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.csI I(1)
+WOFClassLib.Player"
+
+roundMoneyint"__id*
+"""e
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.csJ J(
+
+
+numLettersint*j
+3"e
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.csK K(	
+implicit return:
+guesschar:
+puzzleWOFClassLib.Puzzle:
+
+spinAmountintB
+WOFClassLib.Player

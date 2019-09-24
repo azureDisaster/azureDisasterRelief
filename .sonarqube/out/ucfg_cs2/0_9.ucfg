@@ -1,0 +1,101 @@
+
+WOFClassLib.Wheel.WheelSpin()M
+CC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Wheel.cs2 2("0*Í
+0‹
+ˆ
+M
+CC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Wheel.cs4 4()
+WOFClassLib.Wheel"
+
+isBankruptbool"__id*
+""‰
+†
+M
+CC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Wheel.cs5 5('
+WOFClassLib.Wheel"
+skipTurnbool"__id*
+""Ÿ
+œ
+M
+CC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Wheel.cs6( 6(.
+%0System.Random"__id*0*.
+WOFClassLib.Wheel"
+randomSystem.Random”
+‘
+M
+CC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Wheel.cs64 6(?
+%1int[]"__id*-*+
+WOFClassLib.Wheel"
+WOFClassLibint[]…
+‚
+M
+CC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Wheel.cs64 6(F	
+%2int"System.Array.Length.get*
+
+%1int[]¥¢
+M
+CC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Wheel.cs6( 6(G	
+%3int"System.Random.Next(int)*
+
+%0System.Random*
+	
+%2int2	Next(int)ƒ
+€
+M
+CC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Wheel.cs6 6(G
+wheelPrizeDollarIndexint"__id*
+	
+%3int”
+‘
+M
+CC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Wheel.cs7) 7(4
+%4int[]"__id*-*+
+WOFClassLib.Wheel"
+WOFClassLibint[]˜
+•
+M
+CC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Wheel.cs7) 7(K	
+%5int"
+__arrayGet*
+
+%4int[]*
+
+wheelPrizeDollarIndexint„
+
+M
+CC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Wheel.cs7 7(K
+wheelPrizeDollarAmountint"__id*
+	
+%5int*
+1
+2*–
+1‹
+ˆ
+M
+CC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Wheel.cs: :(!)
+WOFClassLib.Wheel"
+
+isBankruptbool"__id*
+""*
+3*
+2*
+4
+3*”
+4‰
+†
+M
+CC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Wheel.cs> >('
+WOFClassLib.Wheel"
+skipTurnbool"__id*
+""*
+3*u
+3"p
+M
+CC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Wheel.cs@ @(*
+
+wheelPrizeDollarAmountint*i
+5"d
+M
+CC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Wheel.csA A(	
+implicit returnB
+WOFClassLib.Wheel

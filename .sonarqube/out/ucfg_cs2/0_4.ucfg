@@ -1,0 +1,57 @@
+
+!WOFClassLib.Puzzle.Puzzle(string)N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Puzzle.cs ("0*¶
+0á
+Ñ
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Puzzle.cs (+
+%0string"string.ToUpper()*
+
+phrasestringô
+ñ
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Puzzle.cs (+.
+WOFClassLib.Puzzle"
+puzzlePhrasestring"__id*
+
+%0stringÖ
+Ç
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Puzzle.cs ((	
+%1int"string.Length.get*
+
+phrasestringì
+ê
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Puzzle.cs ((+
+WOFClassLib.Puzzle"
+phraseLengthint"__id*
+	
+%1intá
+Ñ
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Puzzle.cs' (7
+%2string"string.ToUpper()*
+
+phrasestring∂
+≥
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Puzzle.cs (8
+%3char[]"+WOFClassLib.Puzzle.InitializePuzzle(string)*
+WOFClassLib.Puzzle*
+
+%2stringî
+ë
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Puzzle.cs (8)
+WOFClassLib.Puzzle"
+displaychar[]"__id*
+
+%3char[]*
+1*j
+1"e
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Puzzle.cs (	
+implicit return:
+phrasestringB
+WOFClassLib.Puzzle

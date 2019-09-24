@@ -1,0 +1,15 @@
+”
+WOFClassLib.Playerobject3
+Player(string)!WOFClassLib.Player.Player(string)k
+*GuessLetter(char, WOFClassLib.Puzzle, int)=WOFClassLib.Player.GuessLetter(char, WOFClassLib.Puzzle, int)o
+,GuessLetter(string, WOFClassLib.Puzzle, int)?WOFClassLib.Player.GuessLetter(string, WOFClassLib.Puzzle, int)e
+'SolvePuzzle(string, WOFClassLib.Puzzle):WOFClassLib.Player.SolvePuzzle(string, WOFClassLib.Puzzle)+
+
+NewRound()WOFClassLib.Player.NewRound())
+	NewGame()WOFClassLib.Player.NewGame()'
+Name.getWOFClassLib.Player.Name.get'
+Name.setWOFClassLib.Player.Name.set3
+TotalMoney.get!WOFClassLib.Player.TotalMoney.get3
+TotalMoney.set!WOFClassLib.Player.TotalMoney.set3
+RoundMoney.get!WOFClassLib.Player.RoundMoney.get3
+RoundMoney.set!WOFClassLib.Player.RoundMoney.set
