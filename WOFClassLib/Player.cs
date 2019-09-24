@@ -44,12 +44,14 @@ namespace WOFClassLib
             if (spinAmount < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(spinAmount), "Argument out of range, should be greater than or equal to zero");
-
             }
-
             // Try the guess and return the number of letters matched
             int numLetters = puzzle.Guess(guess);
-            RoundMoney += numLetters * spinAmount;
+            if (numLetters > 0)
+            {
+                Console.WriteLine("Correct! You won ${0}!", numLetters * spinAmount);
+                RoundMoney += numLetters * spinAmount;
+            }
             return numLetters;
         }
 
@@ -62,12 +64,10 @@ namespace WOFClassLib
         /// <returns>The number of letters matched</returns>
         public int GuessLetter(string guess, Puzzle puzzle, int spinAmount = 0)
         {
-
             if (guess.Length != 1)
             {
                 throw new ArgumentException("The guessed string must have a length of one.", nameof(guess));
             }
-
             char ch = guess[0];
             return GuessLetter(ch, puzzle, spinAmount);
         }
@@ -95,6 +95,14 @@ namespace WOFClassLib
                 TotalMoney += RoundMoney;
             }
             return isSolved;
+        }
+
+        /// <summary>
+        /// Bankrupts player and makes RoundMoney go to 0
+        /// </summary>
+        public void BankruptPlayer()
+        {
+            RoundMoney = 0;
         }
 
         /// <summary>
