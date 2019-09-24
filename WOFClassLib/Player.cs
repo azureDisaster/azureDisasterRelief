@@ -6,36 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace WOFClassLib
-{ 
+{
     /// <summary>
     /// This class performs the functions related to a player of the game.
     /// </summary>
     public class Player
     {
-        
-        private int totalMoney = 0; // private variable for TotalMoney property
-        private int roundMoney = 0; // private variable for RoundMoney property
-
-        /// <summary>
-        /// The Player's name
-        /// </summary>
         public string Name { get; set; }
-
-        /// <summary>
-        /// The total amount of money the player has accumulated during the game.
-        /// </summary>
-        public int TotalMoney
-        {
-            get { return totalMoney; }
-        }
-
-        /// <summary>
-        /// The total amount of money the player has accumulated during the current round
-        /// </summary>
-        public int RoundMoney
-        {
-            get { return roundMoney; }
-        }
+        public int RoundMoney { get; set; }
+        public int TotalMoney { get; set; }
 
         /// <summary>
         /// Creates a new instance of Player.
@@ -44,8 +23,8 @@ namespace WOFClassLib
         public Player(string name = "Player")
         {
             Name = name;
-            totalMoney = 0;
-            roundMoney = 0;
+            RoundMoney = 0;
+            TotalMoney = 0;
         }
 
         /// <summary>
@@ -70,7 +49,7 @@ namespace WOFClassLib
 
             // Try the guess and return the number of letters matched
             int numLetters = puzzle.Guess(guess);
-            roundMoney += numLetters * spinAmount;
+            RoundMoney += numLetters * spinAmount;
             return numLetters;
         }
 
@@ -113,7 +92,7 @@ namespace WOFClassLib
             bool isSolved = puzzle.Solve(guess);
             if (isSolved)
             {
-                totalMoney += RoundMoney;
+                TotalMoney += RoundMoney;
             }
             return isSolved;
         }
@@ -123,7 +102,7 @@ namespace WOFClassLib
         /// </summary>
         public void NewRound()
         {
-            roundMoney = 0;
+            RoundMoney = 0;
         }
 
         /// <summary>
@@ -131,8 +110,8 @@ namespace WOFClassLib
         /// </summary>
         public void NewGame()
         {
-            totalMoney = 0;
-            roundMoney = 0;
+            RoundMoney = 0;
+            TotalMoney = 0;
         }
 
     }
