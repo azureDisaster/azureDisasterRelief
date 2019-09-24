@@ -1,0 +1,79 @@
+
+:WOFClassLib.Player.SolvePuzzle(string, WOFClassLib.Puzzle)N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.csg g("0*Å
+0·
+´
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.csk k(
+
+%0bool""object.operator ==(object, object)*
+"
+object*
+
+puzzleWOFClassLib.Puzzle*
+""*
+1
+2*ì
+1•’
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.csm m(?"
+%1System.ArgumentNullException"System.ArgumentNullExceptionÉ
+Æ
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.csm m(/
+
+%2void":System.ArgumentNullException.ArgumentNullException(string)*$
+"
+%1System.ArgumentNullException*
+""*
+3*¼
+2´
+±
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.csq q(/
+
+%3bool" WOFClassLib.Puzzle.Solve(string)*
+
+puzzleWOFClassLib.Puzzle*
+
+guessstringx
+v
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.csq q(/
+isSolvedbool"__id*
+
+
+%3bool*
+4
+5*›
+4f
+d
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.cst t(
+%4"__id*
+""™
+–
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.cst t((	
+%5int"!WOFClassLib.Player.RoundMoney.get*
+WOFClassLib.PlayerŒ
+‰
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.cst t(()
+WOFClassLib.Player"
+
+totalMoneyint"__id*
+""*
+5*i
+5"d
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.csv v(
+
+isSolvedbool*j
+3"e
+N
+DC:\Users\v-brayu\Documents\azureDisasterRelief\WOFClassLib\Player.csw w(	
+implicit return:
+guessstring:
+puzzleWOFClassLib.PuzzleB
+WOFClassLib.Player

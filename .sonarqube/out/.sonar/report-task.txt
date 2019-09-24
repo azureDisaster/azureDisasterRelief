@@ -1,0 +1,7 @@
+organization=azuredisaster
+projectKey=Azure-Disaster-Relief
+serverUrl=https://sonarcloud.io
+serverVersion=8.0.0.713
+dashboardUrl=https://sonarcloud.io/dashboard?id=Azure-Disaster-Relief
+ceTaskId=AW1lZlSoSJ-9EjtGD4Uq
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AW1lZlSoSJ-9EjtGD4Uq

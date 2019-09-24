@@ -1,0 +1,7 @@
+û
+WOFClassLib.Gameobject#
+Start()WOFClassLib.Game.Start()-
+StartRound()WOFClassLib.Game.StartRound()E
+Play(WOFClassLib.Player))WOFClassLib.Game.Play(WOFClassLib.Player)!
+Quit()WOFClassLib.Game.Quit()!
+Game()WOFClassLib.Game.Game()

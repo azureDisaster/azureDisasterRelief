@@ -1,0 +1,10 @@
+±
+WOFClassLib.Puzzleobject3
+Puzzle(string)!WOFClassLib.Puzzle.Puzzle(string)G
+InitializePuzzle(string)+WOFClassLib.Puzzle.InitializePuzzle(string)I
+GetPuzzleDisplayAsArray(),WOFClassLib.Puzzle.GetPuzzleDisplayAsArray();
+GetPuzzleDisplay()%WOFClassLib.Puzzle.GetPuzzleDisplay()-
+Guess(char)WOFClassLib.Puzzle.Guess(char)1
+Solve(string) WOFClassLib.Puzzle.Solve(string)+
+
+IsSolved()WOFClassLib.Puzzle.IsSolved()
