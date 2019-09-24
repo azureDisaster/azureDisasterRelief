@@ -200,30 +200,31 @@ namespace WOFClassLib
             {
                 PrintPlayerRoundMoney(player);
 
-                //// ask for user's next action
-                //Console.WriteLine("Since you guessed correctly, you can make another spin or pass!");
-                //int userChoice;
-                //bool actionValid = false;
-                //do
-                //{
-                //    Console.WriteLine("1 to Spin or 2 to Pass");
-                //    string input = Console.ReadLine();
-                //    actionValid = int.TryParse(input, out userChoice);
-                //} while (!actionValid || (userChoice != 1 && userChoice != 2));
-                //if (userChoice == 2)
-                //{
-                //    Console.WriteLine("\n\nYou passed!\n\n");
-                //    return;
-                //}
+                // ask for user's next action
+                Console.WriteLine("Since you guessed correctly, you can make another spin or pass!");
+                int userChoice;
+                bool actionValid = false;
+                do
+                {
+                    Console.WriteLine("1 to Spin or 2 to Solve");
+                    string input = Console.ReadLine();
+                    actionValid = int.TryParse(input, out userChoice);
+                } while (!actionValid || (userChoice != 1 && userChoice != 2));
 
+                bool choseSpin = false;
                 // user chose to spin again
+                if (userChoice == 1)
+                {
+                    choseSpin = true;
+                }
+
                 int nextSpinValue = wheel.WheelSpin();
-                if (wheel.isBankrupt)
+                if (choseSpin && wheel.isBankrupt)
                 {
                     BankruptPlayer(player);
                     return;
                 }
-                else if (wheel.skipTurn)
+                else if (choseSpin && wheel.skipTurn)
                 {
                     SkipTurn();
                     return;
@@ -231,7 +232,11 @@ namespace WOFClassLib
                 else
                 {
                     Console.WriteLine("Make another guess or attempt to solve! \n");
-                    Console.WriteLine("You spun ${0}!", nextSpinValue);
+                    if (choseSpin)
+                    {
+                        Console.WriteLine("You spun ${0}!", nextSpinValue);
+                    }
+
                     // player's next guesses
                     guess = Console.ReadLine();
                     bool stringGuess = Regex.IsMatch(guess, "^[a-zA-Z]+"); // returns true if only contains letters
@@ -243,7 +248,7 @@ namespace WOFClassLib
                         stringGuess = Regex.IsMatch(guess, @"^[a-zA-Z]+$");
                     }
 
-                    if (guess.Length > 1) // trying to guess the phrase
+                    if (!choseSpin) // trying to guess the phrase
                     {
                         isSolved = player.SolvePuzzle(guess, puzzle); // last modified
                         if (isSolved)
