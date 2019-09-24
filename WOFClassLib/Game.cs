@@ -67,9 +67,30 @@ namespace WOFClassLib
             while (!puzzle.IsSolved()) // if the game is being played, loop thru the players
             {
                 Play(currentPlayer); // call play on the current player object
+                // finalize the round
+                if (puzzle.IsSolved())
+                {
+                    FinalizeRound(currentPlayer);
+                }
+
+                // switch player
                 index = (index + 1) % totalPlayers;
                 currentPlayer = players[index];
                 ContinueOnKey();
+            }
+        }
+
+        /// <summary>
+        /// The player that solves the phrase gets the money.
+        /// All other players are bankrupt.
+        /// </summary>
+        /// <param name="solvingPlayer"></param>
+        private void FinalizeRound(Player solvingPlayer)
+        {
+            solvingPlayer.WinRound();
+            foreach (Player p in players)
+            {
+                p.NewRound();
             }
         }
 
@@ -179,21 +200,21 @@ namespace WOFClassLib
             {
                 PrintPlayerRoundMoney(player);
 
-                // ask for user's next action
-                Console.WriteLine("Since you guessed correctly, you can make another spin or pass!");
-                int userChoice;
-                bool actionValid = false;
-                do
-                {
-                    Console.WriteLine("1 to Spin or 2 to Pass");
-                    string input = Console.ReadLine();
-                    actionValid = int.TryParse(input, out userChoice);
-                } while (!actionValid || (userChoice != 1 && userChoice != 2));
-                if (userChoice == 2)
-                {
-                    Console.WriteLine("\n\nYou passed!\n\n");
-                    return;
-                }
+                //// ask for user's next action
+                //Console.WriteLine("Since you guessed correctly, you can make another spin or pass!");
+                //int userChoice;
+                //bool actionValid = false;
+                //do
+                //{
+                //    Console.WriteLine("1 to Spin or 2 to Pass");
+                //    string input = Console.ReadLine();
+                //    actionValid = int.TryParse(input, out userChoice);
+                //} while (!actionValid || (userChoice != 1 && userChoice != 2));
+                //if (userChoice == 2)
+                //{
+                //    Console.WriteLine("\n\nYou passed!\n\n");
+                //    return;
+                //}
 
                 // user chose to spin again
                 int nextSpinValue = wheel.WheelSpin();

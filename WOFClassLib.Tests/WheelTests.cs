@@ -13,7 +13,7 @@ namespace WOFClassLib.Tests
         public void TestWheel()
         {
             Wheel wheel = new Wheel();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 20; i++)
             {
                 int spin = wheel.WheelSpin();
                 if (spin == -999)
