@@ -10,6 +10,7 @@ namespace WOFClassLib
     public class Game
     {
         private List<Player> players;
+        private Player currentPlayer;
         private Phrase phrase;
         private Puzzle puzzle;
         private Wheel wheel;
@@ -19,15 +20,9 @@ namespace WOFClassLib
         {
             players = new List<Player>();
             wheel = new Wheel();
-        }
-       
-        /// <summary>
-        /// This method will prompt the user for details regarding the initialization of the game. 
-        /// </summary>
-        public void Start()
-        {
-            // initialize players
             Console.WriteLine("Welcome to Wheel of Fortune sponsored by Azure Disaster Relief LLC.");
+
+            // initialize players
             bool valid = false;
             do
             {
@@ -38,20 +33,25 @@ namespace WOFClassLib
 
             for (int i = 0; i < totalPlayers; i++)
             {
-                Console.WriteLine("Hey player {0} What's your name? \n", i+1);
+                Console.WriteLine("Hey player {0} What's your name? \n", i + 1);
                 players.Add(new Player(Console.ReadLine())); // adds a player obj to list
             }
-
-            // play number of rounds
             Console.WriteLine("Alright, starting with {0} player(s)! \n", totalPlayers);
             ContinueOnKey();
+        }
+
+        /// <summary>
+        /// This method will prompt the user for details regarding the initialization of the game. 
+        /// </summary>
+        public void StartGame()
+        {
+            // play number of rounds
             const int ROUNDS = 3;
             for (int i = 0; i < ROUNDS; i++)
             {
                 Console.WriteLine("ROUND {0}", i + 1);
                 StartRound();
             }
-
             Quit();
         }
 
@@ -63,7 +63,7 @@ namespace WOFClassLib
             phrase = new Phrase();
             puzzle = new Puzzle(phrase.GetPhrase());
             int index = 0;
-            Player currentPlayer = players[index];
+            currentPlayer = players[index];
             while (!puzzle.IsSolved()) // if the game is being played, loop thru the players
             {
                 Play(currentPlayer); // call play on the current player object
