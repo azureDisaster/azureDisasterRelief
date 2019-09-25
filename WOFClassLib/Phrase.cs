@@ -51,7 +51,7 @@ namespace WOFClassLib
         /// <returns></returns>
         public string GetPhrase()
         {
-            return "abc"; // for testing
+            //return "abc"; // for testing
             //check to see if there we still have phrases left in the list. If not, recycle the list.
             if (phrases.Count == 0)
             {

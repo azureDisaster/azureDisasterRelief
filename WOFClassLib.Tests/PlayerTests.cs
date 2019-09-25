@@ -17,6 +17,20 @@ namespace WOFClassLib.Tests
             Assert.Equal("kevin", p.Name);
             Assert.Equal(0, p.RoundMoney);
             Assert.Equal(0, p.TotalMoney);
+
+            Player other = new Player("Joe");
+            Assert.False(p.Equals(other));
+            Assert.False(p.GetHashCode() == other.GetHashCode());
+        }
+
+        [Fact]
+        public void TestCanBuyLetter()
+        {
+            Player p = new Player("kevin");
+            Puzzle puzzle = new Puzzle("a bb");
+            Assert.False(p.CanBuyVowel());
+            p.GuessLetter('b', puzzle, 10000);
+            Assert.True(p.CanBuyVowel());
         }
 
         [Fact]

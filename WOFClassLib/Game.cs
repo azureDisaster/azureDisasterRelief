@@ -15,29 +15,37 @@ namespace WOFClassLib
         private Puzzle puzzle;
         private Wheel wheel;
         private int totalPlayers;
+        private HashSet<char> guessedLetters;
 
         public Game()
         {
             players = new List<Player>();
             wheel = new Wheel();
             Console.WriteLine("Welcome to Wheel of Fortune sponsored by Azure Disaster Relief LLC.");
+            InitializePlayers();
+            ContinueOnKey();
+        }
 
+        /// <summary>
+        /// Initializes the number of players in the game
+        /// </summary>
+        private void InitializePlayers()
+        {
             // initialize players
             bool valid = false;
             do
             {
-                Console.WriteLine("How many players would you like to begin with?");
+                Console.WriteLine("How many players would you like to begin with? ");
                 string input = Console.ReadLine();
                 valid = int.TryParse(input, out totalPlayers);
             } while (!valid || totalPlayers <= 0 || totalPlayers >= 4);
 
             for (int i = 0; i < totalPlayers; i++)
             {
-                Console.WriteLine("Hey player {0} What's your name? \n", i + 1);
+                Console.WriteLine("Hey player {0} What's your name? ", i + 1);
                 players.Add(new Player(Console.ReadLine())); // adds a player obj to list
             }
-            Console.WriteLine("Alright, starting with {0} player(s)! \n", totalPlayers);
-            ContinueOnKey();
+            Console.WriteLine("Alright, starting with {0} player(s)!", totalPlayers);
         }
 
         /// <summary>
@@ -62,46 +70,178 @@ namespace WOFClassLib
         {
             phrase = new Phrase();
             puzzle = new Puzzle(phrase.GetPhrase());
+            guessedLetters = new HashSet<char>(26);
             int index = 0;
             currentPlayer = players[index];
             while (!puzzle.IsSolved()) // if the game is being played, loop thru the players
             {
                 Play(currentPlayer); // call play on the current player object
-                // finalize the round
-                if (puzzle.IsSolved())
-                {
-                    FinalizeRound(currentPlayer);
-                }
-
-                // switch player
-                index = (index + 1) % totalPlayers;
-                currentPlayer = players[index];
+                FinalizeTurn(currentPlayer);
+                SwitchPlayer(ref index);
                 ContinueOnKey();
             }
         }
 
         /// <summary>
-        /// The player that solves the phrase gets the money.
-        /// All other players are bankrupt.
+        /// Checks if puzzle is solved.
+        /// If the game is finished, winning solving player gets the RoundMoney
+        /// All other players are then bankrupt to start a new round.
         /// </summary>
         /// <param name="solvingPlayer"></param>
-        private void FinalizeRound(Player solvingPlayer)
+        private void FinalizeTurn(Player solvingPlayer)
         {
-            solvingPlayer.WinRound();
-            foreach (Player p in players)
+            if (puzzle.IsSolved())
             {
-                p.NewRound();
+                solvingPlayer.WinRound();
+                foreach (Player p in players)
+                {
+                    p.NewRound();
+                }
             }
         }
 
         /// <summary>
-        /// This method will create a player for every player in the game. 
+        /// Utility to switch to the next player
+        /// </summary>
+        /// <param name="index">The index to increment</param>
+        private void SwitchPlayer(ref int index)
+        {
+            index = (index + 1) % totalPlayers;
+            currentPlayer = players[index];
+        }
+
+        /// <summary>
+        /// This method allows the player to play and perform an action
         /// </summary>
         /// <param name="player">A player object instantiated by the Player class.</param>
         private void Play(Player player)
         {
-            Console.WriteLine("Hey {0}! Now it's your turn, make a guess. Remember, you can only guess a letter, no solving allowed!\n", player.Name);
-            PlayerFirstSpin(player);
+            Console.WriteLine("Hey {0}! Now it's your turn!", player.Name);
+            PrintPlayerRoundMoney(player);
+            PrintPuzzle();
+            bool spinSuccess = FirstSpin(player); // bool is spin was successful or not
+
+            // actionloop repeatedly loops and uses spinSuccess to determine
+            // if user gets to guess again or solve
+            ActionLoop:
+            PrintPlayerRoundMoney(player);
+            if (spinSuccess && !puzzle.IsSolved())
+            {
+                PrintPuzzle();            
+                spinSuccess = NextAction(player);
+                goto ActionLoop;
+            }
+            else if (spinSuccess && puzzle.IsSolved())
+            {
+                Console.WriteLine("YAYYYY! You solved it!");
+            }
+            else
+            {
+                Console.WriteLine("Your guess was wrong... Let's move on to the next player.");
+            }
+        }
+
+        /// <summary>
+        /// Perform the a spin action.
+        /// Return true if correct, false if bankrupt/skipturn/incorrect
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns>bool if action was a success</returns>
+        private bool FirstSpin(Player player)
+        {
+            bool guessedCorrectly = false;
+            int spinValue = wheel.WheelSpin();
+            if (wheel.isBankrupt)
+            {
+                BankruptPlayer(player);
+            }
+            else if (wheel.skipTurn)
+            {
+                SkipTurn();
+            }
+            else
+            {
+                System.Console.WriteLine("You spun ${0}!", spinValue);
+                char userLetter = AskForLetter();
+                int matches = player.GuessLetter(userLetter, puzzle, spinValue);
+                if (matches > 0)
+                {
+                    guessedCorrectly = true;
+                }
+            }
+            // returns true if correct guess, false if bankrupt/skip
+            return guessedCorrectly;
+        }
+
+        /// <summary>
+        /// Asks for user's next action.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns>bool if action was a success</returns>
+        private bool NextAction(Player player)
+        {
+            Console.WriteLine("Since you guessed correctly, you can make another spin or solve!");
+            int userChoice;
+            bool actionValid = false;
+            do
+            {
+                Console.WriteLine("1 to Spin or 2 to Solve");
+                string input = Console.ReadLine();
+                actionValid = int.TryParse(input, out userChoice);
+            } while (!actionValid || (userChoice != 1 && userChoice != 2));
+
+            bool actionSuccess = false;
+            if (userChoice == 1)
+            {
+                // true if guessed correct, false if incorrect/skip/bankrupt
+                actionSuccess = FirstSpin(player);
+            }
+            else if (userChoice == 2)
+            {
+                // true if guessed correct, false if not
+                string guessString = AskForStringSolve();
+                actionSuccess = player.SolvePuzzle(guessString, puzzle);
+            }
+            return actionSuccess;
+        }
+
+        /// <summary>
+        /// Asks for user's letter guess
+        /// </summary>
+        /// <returns>char letter</returns>
+        private char AskForLetter()
+        {
+            char letter = '\0';
+            bool valid = false;
+            do
+            {
+                System.Console.Write("Guess a single letter: ");
+                valid = char.TryParse(Console.ReadLine(), out letter);
+                if (guessedLetters.Contains(letter))
+                {
+                    System.Console.WriteLine("'{0}' was already guessed!", letter);
+                }
+            } while (!valid || !Char.IsLetter(letter) || guessedLetters.Contains(letter));
+
+            // letter was unguessed
+            guessedLetters.Add(letter);
+            return letter;
+        }
+
+        /// <summary>
+        /// Asks for the user's guess to solve
+        /// </summary>
+        /// <returns>a string for user to solve</returns>
+        private string AskForStringSolve()
+        {
+            System.Console.Write("What is your guess? ");
+            string guess = Console.ReadLine();
+            return guess;
+        }
+
+        private void PrintPuzzle()
+        {
+            System.Console.WriteLine(puzzle.GetPuzzleDisplay());
         }
 
         /// <summary>
@@ -111,30 +251,6 @@ namespace WOFClassLib
         private void PrintPlayerRoundMoney(Player player)
         {
             Console.WriteLine("{0}: ${1}", player.Name, player.RoundMoney);
-        }
-
-        /// <summary>
-        /// The first spin for the player.
-        /// An action item is determined with the spin.
-        /// </summary>
-        /// <param name="player">the current player</param>
-        private void PlayerFirstSpin(Player player)
-        {
-            int spinValue = wheel.WheelSpin();
-            if (wheel.isBankrupt)
-            {
-                BankruptPlayer(player);
-                return;
-            }
-            else if (wheel.skipTurn)
-            {
-                SkipTurn();
-                return;
-            }
-            else
-            {
-                PlayerCanGuess(player, spinValue);
-            }
         }
 
         /// <summary>
@@ -163,129 +279,6 @@ namespace WOFClassLib
         private void SkipTurn()
         {
             Console.WriteLine("\n\nSorry you lost your turn!!!\n\n");
-        }
-
-        /// <summary>
-        /// Allows player to guess a letter for a spinValue.
-        /// If player guesses correctly, then player perform another action.
-        /// </summary>
-        /// <param name="player">the current player</param>
-        /// <param name="spinValue">the value of the spin</param>
-        private void PlayerCanGuess(Player player, int spinValue)
-        {
-            PrintPlayerRoundMoney(player);
-            // ask for a letter
-            Console.WriteLine("You spun ${0}!", spinValue);
-            Console.WriteLine(puzzle.GetPuzzleDisplay());
-            string guess = "";
-            int numberOfCorrectLetters = 0;
-
-            // validate letter
-            bool validGuess = false;
-            while (!validGuess)
-            {
-                Console.WriteLine("This is your first guess, please enter a single letter. \n");
-                guess = Console.ReadLine();
-                Console.WriteLine("You guessed: {0}! \n", guess);
-                validGuess = Regex.IsMatch(guess, "^[a-zA-Z]") && guess.Length == 1;
-            }
-
-            // guess letter
-            numberOfCorrectLetters = player.GuessLetter(guess, puzzle, spinValue);
-            Console.WriteLine(puzzle.GetPuzzleDisplay());
-
-            // if successful guess, player can guess, solve, or pass
-            bool isSolved = puzzle.IsSolved(); // false
-            while (numberOfCorrectLetters >= 1 && !isSolved)
-            {
-                PrintPlayerRoundMoney(player);
-
-                // ask for user's next action
-                Console.WriteLine("Since you guessed correctly, you can make another spin or pass!");
-                int userChoice;
-                bool actionValid = false;
-                do
-                {
-                    Console.WriteLine("1 to Spin or 2 to Solve");
-                    string input = Console.ReadLine();
-                    actionValid = int.TryParse(input, out userChoice);
-                } while (!actionValid || (userChoice != 1 && userChoice != 2));
-
-                bool choseSpin = false;
-                // user chose to spin again
-                if (userChoice == 1)
-                {
-                    choseSpin = true;
-                }
-
-                int nextSpinValue = wheel.WheelSpin();
-                if (choseSpin && wheel.isBankrupt)
-                {
-                    BankruptPlayer(player);
-                    return;
-                }
-                else if (choseSpin && wheel.skipTurn)
-                {
-                    SkipTurn();
-                    return;
-                }
-                else
-                {
-                    Console.WriteLine("Make another guess or attempt to solve! \n");
-                    if (choseSpin)
-                    {
-                        Console.WriteLine("You spun ${0}!", nextSpinValue);
-                    }
-
-                    // player's next guesses
-                    guess = Console.ReadLine();
-                    bool stringGuess = Regex.IsMatch(guess, "^[a-zA-Z]+"); // returns true if only contains letters
-                    while (!stringGuess)
-                    {
-                        Console.WriteLine("Please guess a letter or phrase.\n");
-                        guess = Console.ReadLine();
-                        Console.WriteLine("You guessed: {0}! \n", guess);
-                        stringGuess = Regex.IsMatch(guess, @"^[a-zA-Z]+$");
-                    }
-
-                    if (!choseSpin) // trying to guess the phrase
-                    {
-                        isSolved = player.SolvePuzzle(guess, puzzle); // last modified
-                        if (isSolved)
-                        {
-                            Console.WriteLine("YAYYYY! You solved it! \n");
-                            Console.WriteLine(puzzle.GetPuzzleDisplay());
-                            return; // early exit
-                        }
-                        numberOfCorrectLetters = 0;
-                    }
-                    else
-                    {
-                        numberOfCorrectLetters = player.GuessLetter(guess, puzzle, nextSpinValue);
-                        isSolved = puzzle.IsSolved();
-                    }
-                    Console.WriteLine("You guessed: {0} \n", guess);
-                    Console.WriteLine(puzzle.GetPuzzleDisplay());
-                }
-            }
-
-            if (isSolved)
-            {
-                PrintPlayerRoundMoney(player);
-                Console.WriteLine("Congrats! You solved it! \n");
-            }
-            else
-            {
-                PrintPlayerRoundMoney(player);
-                if (totalPlayers == 1)
-                {
-                    Console.WriteLine("Your guess was wrong. It's okay, you may try again. \n");
-                }
-                else
-                {
-                    Console.WriteLine("Your guess was wrong... Let's move on to the next player. \n");
-                }
-            }
         }
 
         /// <summary>

@@ -110,5 +110,15 @@ namespace WOFClassLib
         {
             TotalMoney += RoundMoney;
         }
+
+        /// <summary>
+        /// Returns if player can purchase a vowel.
+        /// A vowel costs 250
+        /// </summary>
+        /// <returns></returns>
+        public bool CanBuyVowel()
+        {
+            return RoundMoney > 250;
+        }
     }
 }
