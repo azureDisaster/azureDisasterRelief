@@ -53,7 +53,7 @@ namespace WOFClassLib
         }
 
         /// <summary>
-        /// This method will prompt the user for details regarding the initialization of the game. 
+        /// Starts the game loop for number of rounds
         /// </summary>
         public void StartGame()
         {
@@ -122,7 +122,23 @@ namespace WOFClassLib
         }
 
         /// <summary>
-        /// This method allows the player to play and perform an action
+        /// Returns the winner (highest TotalMoney) of the game
+        /// </summary>
+        private Player GetWinner()
+        {
+            Player winner = players[0];
+            for (int i = 1; i < players.Count; i++)
+            {
+                if (players[i].TotalMoney > winner.TotalMoney)
+                {
+                    winner = players[i];
+                }
+            }
+            return winner;
+        }
+
+        /// <summary>
+        /// Main play loop. Asks for user's guess until incorrect or skipped.
         /// </summary>
         /// <param name="player">A player object instantiated by the Player class.</param>
         private void Play(Player player)
@@ -130,45 +146,55 @@ namespace WOFClassLib
             Console.WriteLine("Hey {0}! Now it's your turn!", player.Name);
             PrintPlayerRoundMoney(player);
             PrintPuzzle();
-            bool spinSuccess = FirstSpin(player); // bool is spin was successful or not
+            bool guessCorrect = false, skipBankrupt = false;
+            SpinAction(player, ref guessCorrect, ref skipBankrupt);
 
-            // actionloop repeatedly loops and uses spinSuccess to determine
-            // if user gets to guess again or solve
             ActionLoop:
             PrintPlayerRoundMoney(player);
-            if (spinSuccess && !puzzle.IsSolved())
+            if (!skipBankrupt)
             {
-                PrintPuzzle();            
-                spinSuccess = NextAction(player);
-                goto ActionLoop;
-            }
-            else if (spinSuccess && puzzle.IsSolved())
-            {
-                Console.WriteLine("YAYYYY! You solved it!");
+                PrintPuzzle();
+                if (!puzzle.IsSolved())
+                {
+                    if (guessCorrect)
+                    {
+                        NextAction(player, ref guessCorrect, ref skipBankrupt);
+                        goto ActionLoop;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Your guess was wrong... Let's move on to the next player.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("YAYYYY! You solved it!");     
+                }
             }
             else
             {
-                Console.WriteLine("Your guess was wrong... Let's move on to the next player.");
+                System.Console.WriteLine("Let's move on to the next player.");
             }
         }
 
         /// <summary>
-        /// Perform the a spin action.
-        /// Return true if correct, false if bankrupt/skipturn/incorrect
+        /// Perform the spin action.
+        /// Updates bool parameters for Play loop to determine next action.
         /// </summary>
         /// <param name="player"></param>
         /// <returns>bool if action was a success</returns>
-        private bool FirstSpin(Player player)
+        private void SpinAction(Player player, ref bool guessCorrect, ref bool skipBankrupt)
         {
-            bool guessedCorrectly = false;
             int spinValue = wheel.WheelSpin();
             if (wheel.isBankrupt)
             {
                 BankruptPlayer(player);
+                skipBankrupt = true;
             }
             else if (wheel.skipTurn)
             {
                 SkipTurn();
+                skipBankrupt = true;
             }
             else
             {
@@ -177,19 +203,22 @@ namespace WOFClassLib
                 int matches = player.GuessLetter(userLetter, puzzle, spinValue);
                 if (matches > 0)
                 {
-                    guessedCorrectly = true;
+                    guessCorrect = true;
+                }
+                else
+                {
+                    guessCorrect = false;
                 }
             }
-            // returns true if correct guess, false if bankrupt/skip
-            return guessedCorrectly;
         }
 
         /// <summary>
-        /// Asks for user's next action.
+        /// Asks for user's next action (assumes previously correct)
+        /// Updates bool parameters for Play loop to determine next action.
         /// </summary>
         /// <param name="player"></param>
         /// <returns>bool if action was a success</returns>
-        private bool NextAction(Player player)
+        private void NextAction(Player player, ref bool guessCorrect, ref bool skipBankrupt)
         {
             Console.WriteLine("Since you guessed correctly, you can make another spin or solve!");
             int userChoice;
@@ -201,23 +230,20 @@ namespace WOFClassLib
                 actionValid = int.TryParse(input, out userChoice);
             } while (!actionValid || (userChoice != 1 && userChoice != 2));
 
-            bool actionSuccess = false;
             if (userChoice == 1)
             {
-                // true if guessed correct, false if incorrect/skip/bankrupt
-                actionSuccess = FirstSpin(player);
+                SpinAction(player, ref guessCorrect, ref skipBankrupt);
             }
             else if (userChoice == 2)
             {
-                // true if guessed correct, false if not
                 string guessString = AskForStringSolve();
-                actionSuccess = player.SolvePuzzle(guessString, puzzle);
+                guessCorrect = player.SolvePuzzle(guessString, puzzle);
             }
-            return actionSuccess;
         }
 
         /// <summary>
         /// Asks for user's letter guess
+        /// Player can also purchase a letter if enough money
         /// </summary>
         /// <returns>char letter</returns>
         private char AskForLetter(Player player)
@@ -264,6 +290,9 @@ namespace WOFClassLib
             return guess;
         }
 
+        /// <summary>
+        /// Prints the puzzle
+        /// </summary>
         private void PrintPuzzle()
         {
             System.Console.WriteLine(puzzle.GetPuzzleDisplay());
@@ -316,6 +345,10 @@ namespace WOFClassLib
             Environment.Exit(0);
         }
 
+
+        /// <summary>
+        /// Returns if char is a vowel
+        /// </summary>
         private bool IsVowel(char c)
         {
             switch (Char.ToLower(c))

@@ -32,7 +32,7 @@ namespace WOFClassLib
         /// <returns></returns>
         public string GetPhrase()
         {
-            //return "abc";
+            //return "abcd";
             string path = bankPath;
             int cat = random.Next(numFiles);
             switch (cat)
