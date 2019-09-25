@@ -15,11 +15,11 @@ namespace WOFClassLib
     {
         public static int VOWELCOST = 250;
         private static int ID = 0;
-        private int UniqueID;
 
         public string Name { get; set; }
         public int RoundMoney { get; set; }
         public int TotalMoney { get; set; }
+        public int UniqueID { get; private set; }
 
         /// <summary>
         /// Creates a new instance of Player.

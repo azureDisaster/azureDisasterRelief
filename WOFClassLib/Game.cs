@@ -64,6 +64,8 @@ namespace WOFClassLib
                 Console.WriteLine("ROUND {0}", i + 1);
                 StartRound();
             }
+
+            PrintWinner();
             Quit();
         }
 
@@ -124,7 +126,7 @@ namespace WOFClassLib
         /// <summary>
         /// Returns the winner (highest TotalMoney) of the game
         /// </summary>
-        private Player GetWinner()
+        private void PrintWinner()
         {
             Player winner = players[0];
             for (int i = 1; i < players.Count; i++)
@@ -134,7 +136,7 @@ namespace WOFClassLib
                     winner = players[i];
                 }
             }
-            return winner;
+            Console.WriteLine("{0} is the winner with ${1}", winner.Name, winner.TotalMoney);
         }
 
         /// <summary>
@@ -148,7 +150,7 @@ namespace WOFClassLib
             PrintPuzzle();
             bool guessCorrect = false, skipBankrupt = false;
             SpinAction(player, ref guessCorrect, ref skipBankrupt);
-
+            Console.Clear();
             ActionLoop:
             PrintPlayerRoundMoney(player);
             if (!skipBankrupt)
@@ -159,6 +161,7 @@ namespace WOFClassLib
                     if (guessCorrect)
                     {
                         NextAction(player, ref guessCorrect, ref skipBankrupt);
+                        Console.Clear();
                         goto ActionLoop;
                     }
                     else
@@ -304,7 +307,25 @@ namespace WOFClassLib
         /// <param name="player">the current player</param>
         private void PrintPlayerRoundMoney(Player player)
         {
-            Console.WriteLine("{0}: ${1}", player.Name, player.RoundMoney);
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (player.UniqueID == players[i].UniqueID)
+                {
+                    Console.BackgroundColor = ConsoleColor.Blue;
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine("{0}: ${1}", players[i].Name, players[i].RoundMoney);
+                    Console.WriteLine("Total Score: ${0}", players[i].TotalMoney);
+                    Console.ResetColor();
+                    Console.WriteLine("");
+                }
+                else
+                {
+                    Console.WriteLine("{0}: ${1}", players[i].Name, players[i].RoundMoney);
+                    Console.WriteLine("Total Score: ${0}", players[i].TotalMoney);
+                    Console.WriteLine("");
+                }
+            }
+            
         }
 
         /// <summary>
@@ -353,7 +374,11 @@ namespace WOFClassLib
         {
             switch (Char.ToLower(c))
             {
-                case 'a': case 'e': case 'i': case 'o': case 'u':
+                case 'a':
+                case 'e':
+                case 'i':
+                case 'o':
+                case 'u':
                     return true;
                 default:
                     return false;
