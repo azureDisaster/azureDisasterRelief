@@ -24,6 +24,7 @@ namespace WOFClassLib
             resetGame = false;
             players = new List<Player>();
             wheel = new Wheel();
+            phrase = new Phrase();
             Console.WriteLine("Welcome to Wheel of Fortune sponsored by Azure Disaster Relief LLC.");
             InitializePlayers();
             ContinueOnKey();
@@ -77,8 +78,8 @@ namespace WOFClassLib
         /// </summary>
         private void StartRound()
         {
-            phrase = new Phrase();
             puzzle = new Puzzle(phrase.GetPhrase());
+            System.Console.WriteLine("The category is: {0}", phrase.Category);
             guessedLetters = new HashSet<char>(26);
             guessedVowels = new HashSet<char>(5);
             int index = 0;

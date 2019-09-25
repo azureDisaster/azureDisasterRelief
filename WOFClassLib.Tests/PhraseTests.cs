@@ -12,10 +12,10 @@ namespace WOFClassLib.Tests
         [Fact]
         public void GetPhrase_Tests()
         {
-            var sut = new Phrase();
+            Phrase sut = new Phrase();
 
             string phrase = sut.GetPhrase();
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < 10; i++)
             {
                 string newPhrase = sut.GetPhrase();
                 Assert.NotEqual(newPhrase, phrase);
