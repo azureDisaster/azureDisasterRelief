@@ -85,6 +85,11 @@ steps:
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
+  # Build project
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+
 - task: DotNetCoreCLI@2
   displayName: 'Publish the project - $(buildConfiguration)'
   inputs:
@@ -97,3 +102,8 @@ steps:
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
   condition: succeeded()
+
+  # Build project
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
