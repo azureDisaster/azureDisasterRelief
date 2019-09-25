@@ -24,13 +24,18 @@ namespace WOFClassLib.Tests
         }
 
         [Fact]
-        public void TestCanBuyLetter()
+        public void TestCanBuyLetterAndPurchaseVowel()
         {
+            // test if can purchase vowel
             Player p = new Player("kevin");
-            Puzzle puzzle = new Puzzle("a bb");
+            Puzzle puzzle = new Puzzle("a b");
             Assert.False(p.CanBuyVowel());
-            p.GuessLetter('b', puzzle, 10000);
+            p.GuessLetter('b', puzzle, 1000);
             Assert.True(p.CanBuyVowel());
+
+            // test if purchase vowel subtracts right
+            p.PurchaseVowel();
+            Assert.Equal(1000 - Player.VOWELCOST, p.RoundMoney);
         }
 
         [Fact]
@@ -102,6 +107,5 @@ namespace WOFClassLib.Tests
             p.NewRound();
             Assert.Equal(0, p.RoundMoney);
         }
-
     }
 }

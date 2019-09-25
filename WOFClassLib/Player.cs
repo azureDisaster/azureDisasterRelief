@@ -13,6 +13,7 @@ namespace WOFClassLib
     /// </summary>
     public class Player
     {
+        public static int VOWELCOST = 250;
         private static int ID = 0;
         private int UniqueID;
 
@@ -113,12 +114,21 @@ namespace WOFClassLib
 
         /// <summary>
         /// Returns if player can purchase a vowel.
-        /// A vowel costs 250
+        /// A vowel costs VOWELCOST
         /// </summary>
         /// <returns></returns>
         public bool CanBuyVowel()
         {
-            return RoundMoney > 250;
+            return RoundMoney >= VOWELCOST;
+        }
+
+        /// <summary>
+        /// Player purchases a vowel for VOWELCOST
+        /// </summary>
+        /// <returns></returns>
+        public void PurchaseVowel()
+        {
+            RoundMoney -= VOWELCOST;                
         }
     }
 }

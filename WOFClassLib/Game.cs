@@ -16,6 +16,7 @@ namespace WOFClassLib
         private Wheel wheel;
         private int totalPlayers;
         private HashSet<char> guessedLetters;
+        private HashSet<char> guessedVowels;
 
         public Game()
         {
@@ -71,6 +72,7 @@ namespace WOFClassLib
             phrase = new Phrase();
             puzzle = new Puzzle(phrase.GetPhrase());
             guessedLetters = new HashSet<char>(26);
+            guessedVowels = new HashSet<char>(5);
             int index = 0;
             currentPlayer = players[index];
             while (!puzzle.IsSolved()) // if the game is being played, loop thru the players
@@ -162,7 +164,7 @@ namespace WOFClassLib
             else
             {
                 System.Console.WriteLine("You spun ${0}!", spinValue);
-                char userLetter = AskForLetter();
+                char userLetter = AskForLetter(player);
                 int matches = player.GuessLetter(userLetter, puzzle, spinValue);
                 if (matches > 0)
                 {
@@ -209,7 +211,7 @@ namespace WOFClassLib
         /// Asks for user's letter guess
         /// </summary>
         /// <returns>char letter</returns>
-        private char AskForLetter()
+        private char AskForLetter(Player player)
         {
             char letter = '\0';
             bool valid = false;
@@ -220,6 +222,20 @@ namespace WOFClassLib
                 if (guessedLetters.Contains(letter))
                 {
                     System.Console.WriteLine("'{0}' was already guessed!", letter);
+                }
+                else if (!guessedLetters.Contains(letter) && IsVowel(letter))
+                {
+                    if (!player.CanBuyVowel())
+                    {
+                        System.Console.WriteLine("You can't buy '{0}'. You're broke AF!!!", letter);
+                        valid = false;
+                    }
+                    else
+                    {
+                        System.Console.WriteLine("You bought '{0}'", letter);
+                        guessedVowels.Add(letter);
+                        player.PurchaseVowel();
+                    }
                 }
             } while (!valid || !Char.IsLetter(letter) || guessedLetters.Contains(letter));
 
@@ -289,6 +305,17 @@ namespace WOFClassLib
             Console.WriteLine("The game is over! Press any key to exit...Byeeee~ \n");
             Console.ReadKey();
             Environment.Exit(0);
+        }
+
+        private bool IsVowel(char c)
+        {
+            switch (Char.ToLower(c))
+            {
+                case 'a': case 'e': case 'i': case 'o': case 'u':
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 }
