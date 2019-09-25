@@ -10,159 +10,102 @@ namespace WOFClassLib.Tests
 {
     public class PlayerTests
     {
-        [Theory]
-        [InlineData("D","DOG", 1)]
-        [InlineData("X", "DOG", 0)]
-        [InlineData("U", "BLUES CLUES", 2)]
-        public void GuessLetter_StringGuessTests(string guess, string puzzleString, int expected)
+        [Fact]
+        public void TestConstructor()
         {
-            var sut = new Player();
-            var puzzle = new Puzzle(puzzleString);
-            int actual = sut.GuessLetter(guess, puzzle);
-            Assert.Equal(expected, actual);
-        }
+            Player p = new Player("kevin");
+            Assert.Equal("kevin", p.Name);
+            Assert.Equal(0, p.RoundMoney);
+            Assert.Equal(0, p.TotalMoney);
 
-        [Theory]
-        [InlineData("")]
-        [InlineData("DO")]
-        public void GuessLetter_BadStringGuessShouldThrowException(string guess)
-        {
-            var sut = new Player();
-            var puzzle = new Puzzle("DOG");
-            Assert.Throws<ArgumentException>(() => sut.GuessLetter(guess, puzzle));
+            Player other = new Player("Joe");
+            Assert.False(p.Equals(other));
+            Assert.False(p.GetHashCode() == other.GetHashCode());
         }
 
         [Fact]
-        public void GuessLetter_PuzzleNullShouldThrowException()
+        public void TestCanBuyLetterAndPurchaseVowel()
         {
-            var sut = new Player();
-            Assert.Throws<ArgumentNullException>(() => sut.GuessLetter('D', null));
+            // test if can purchase vowel
+            Player p = new Player("kevin");
+            Puzzle puzzle = new Puzzle("a b");
+            Assert.False(p.CanBuyVowel());
+            p.GuessLetter('b', puzzle, 1000);
+            Assert.True(p.CanBuyVowel());
+
+            // test if purchase vowel subtracts right
+            p.PurchaseVowel();
+            Assert.Equal(1000 - Player.VOWELCOST, p.RoundMoney);
         }
 
         [Fact]
-        public void GuessLetter_SpinAmountNegativeShouldThrowException()
+        public void TestGuessLetterAsChar()
         {
-            var sut = new Player();
-            var puzzle = new Puzzle("DOG");
-            Assert.Throws<ArgumentOutOfRangeException>(() => sut.GuessLetter('D', puzzle, -1000));
+            Player p = new Player("kevin");
+            Puzzle puzzle = new Puzzle("a bb");
+            Assert.Equal(1, p.GuessLetter('a', puzzle, 100));
+            Assert.Equal(0, p.GuessLetter('z', puzzle, 100));
+            Assert.Equal(2, p.GuessLetter('b', puzzle, 100));
         }
 
         [Fact]
-        public void GuessLetter_GuessCorrectRoundMOneyShouldIncrease()
+        public void TestGuessLetterAsString()
         {
-            var sut = new Player();
-            var puzzle = new Puzzle("DOG");
-            int spinAmount = 100;
-            
-            sut.GuessLetter('D', puzzle, spinAmount); // should match 1 letter
-            int numMatches = 1;
-            int expected = spinAmount * numMatches;
-            int actual = sut.RoundMoney;
-
-            Assert.Equal(expected, actual);
+            Player p = new Player("kevin");
+            Puzzle puzzle = new Puzzle("a bb");
+            Assert.Equal(1, p.GuessLetter("a", puzzle, 100));
+            Assert.Equal(0, p.GuessLetter("z", puzzle, 100));
+            Assert.Equal(2, p.GuessLetter("b", puzzle, 100));
         }
 
         [Fact]
-        public void GuessLetter_GuessIncorrectRoundMoneyShouldNotIncrease()
+        public void TestRoundMoney()
         {
-            var sut = new Player();
-            var puzzle = new Puzzle("DOG");
-            int spinAmount = 100;
+            Player p = new Player("kevin");
+            Puzzle puzzle = new Puzzle("a bb");
+            p.GuessLetter('a', puzzle, 100); // +100
+            Assert.Equal(100, p.RoundMoney);
 
-            sut.GuessLetter('X', puzzle, spinAmount); // should match 0 letters
-            int numMatches = 0;
-            int expected = spinAmount * numMatches;
-            int actual = sut.RoundMoney;
+            p.GuessLetter('z', puzzle, 100); // should not increase
+            Assert.Equal(100, p.RoundMoney);
 
-            Assert.Equal(expected, actual);
-        }
-
-
-
-        [Fact]
-        public void SolvePuzzle_PuzzleNullShouldThrowException()
-        {
-            var sut = new Player();
-            Assert.Throws<ArgumentNullException>(() => sut.SolvePuzzle("DOG", null));
+            p.GuessLetter('b', puzzle, 100); // +200
+            Assert.Equal(300, p.RoundMoney);
         }
 
         [Fact]
-        public void SolvePuzzle_GuessCorrectTotalMoneyShouldIncrease()
+        public void TestBankrupt()
         {
-            var sut = new Player();
-            var puzzle = new Puzzle("DOG");
-
-            int spinAmount = 100;
-            sut.GuessLetter('D', puzzle, spinAmount);
-            int numMatches = 1;
-
-            sut.SolvePuzzle("DOG", puzzle);
-            int expected = numMatches * spinAmount;
-            int actual = sut.TotalMoney;
-
-            Assert.Equal(expected, actual);
-
+            Player p = new Player("kevin");
+            Puzzle puzzle = new Puzzle("a bb");
+            p.GuessLetter('a', puzzle, 100); // +100
+            p.BankruptPlayer();
+            Assert.Equal(0, p.RoundMoney);
         }
 
         [Fact]
-        public void SolvePuzzle_GuessIncorrectTotalMoneyShouldNotIncrease()
+        public void TestSolvePuzzle()
         {
-            var sut = new Player();
-            var puzzle = new Puzzle("DOG");
-
-            int spinAmount = 100;
-            sut.GuessLetter('D', puzzle, spinAmount);
-
-            sut.SolvePuzzle("CAT", puzzle);
-            int expected = 0;
-            int actual = sut.TotalMoney;
-
-            Assert.Equal(expected, actual);
-
+            Player sut = new Player();
+            Puzzle puzzle = new Puzzle("DOG");
+            Assert.True(sut.SolvePuzzle("DOG", puzzle));
+            Assert.False(sut.SolvePuzzle("AAAA", puzzle));
         }
 
         [Fact]
-        public void NewRound_RoundMoneyShouldBeZero()
+        public void TestWinRoundandNewRound()
         {
-            var sut = new Player();
-            var puzzle = new Puzzle("DOG");
+            Player p = new Player();
+            Puzzle puzzle = new Puzzle("DOG");
+            p.GuessLetter('d', puzzle, 100);
+            p.GuessLetter('o', puzzle, 100);
+            p.GuessLetter('g', puzzle, 100);
+            Assert.Equal(300, p.RoundMoney);
+            p.WinRound();
+            Assert.Equal(300, p.TotalMoney);
 
-            int spinAmount = 100;
-            sut.GuessLetter('D', puzzle, spinAmount);
-
-            Assert.Equal(100, sut.RoundMoney);
-            sut.NewRound();
-            Assert.Equal(0, sut.RoundMoney);            
-        }
-
-        [Fact]
-        public void NewGame_TotalAndRoundMoneyShouldBeZero()
-        {
-            var sut = new Player();
-            var puzzle = new Puzzle("DOG");
-
-            // guess one letter to bring round money to $100
-            int spinAmount = 100;
-            sut.GuessLetter('D', puzzle, spinAmount);
-            Assert.Equal(100, sut.RoundMoney); 
-
-            // solve the puzzle to bring total money to $100
-            sut.SolvePuzzle("DOG", puzzle);
-            Assert.Equal(100, sut.TotalMoney);
-
-            // start a new game, total money and round money should be zero
-            sut.NewGame();
-            Assert.Equal(0, sut.RoundMoney);
-            Assert.Equal(0, sut.TotalMoney);
-        }
-
-        [Theory]
-        [InlineData("Diane")]
-        public void PropertyName_Test(string expected)
-        {
-            var sut = new Player(expected);
-            string actual = sut.Name;
-            Assert.Equal(expected, actual);
+            p.NewRound();
+            Assert.Equal(0, p.RoundMoney);
         }
     }
 }

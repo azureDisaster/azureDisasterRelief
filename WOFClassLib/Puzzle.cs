@@ -35,7 +35,7 @@ namespace WOFClassLib
         /// <returns>The current state of the puzzle as an array of chars</returns>
         private char[] InitializePuzzle(string phrase)
         {
-            string puzzle = "";
+            List<char> puz = new List<char>(phrase.Length);
 
             for (int i = 0; i < phraseLength; i++)
             {
@@ -57,14 +57,14 @@ namespace WOFClassLib
 
                 if(char.IsWhiteSpace(c))
                 {
-                    puzzle += " ";
+                    puz.Add(' ');
                 }
                 else
                 {
-                    puzzle += "-";
+                    puz.Add('-');
                 }
             }
-            return puzzle.ToCharArray();     
+            return puz.ToArray();
         }
 
         /// <summary>
