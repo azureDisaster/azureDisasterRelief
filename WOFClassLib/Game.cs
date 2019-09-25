@@ -9,6 +9,7 @@ namespace WOFClassLib
     /// </summary>
     public class Game
     {
+        private bool resetGame;
         private List<Player> players;
         private Player currentPlayer;
         private Phrase phrase;
@@ -20,6 +21,7 @@ namespace WOFClassLib
 
         public Game()
         {
+            resetGame = false;
             players = new List<Player>();
             wheel = new Wheel();
             Console.WriteLine("Welcome to Wheel of Fortune sponsored by Azure Disaster Relief LLC.");
@@ -62,6 +64,12 @@ namespace WOFClassLib
                 StartRound();
             }
             Quit();
+        }
+
+        public bool ResetStatus()
+        {
+            resetGame = true;
+            return resetGame;
         }
 
         /// <summary>
