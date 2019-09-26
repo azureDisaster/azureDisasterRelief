@@ -78,13 +78,6 @@ steps:
      **\WheelOfFortune\bin\**\*
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
-
 - task: DotNetCoreCLI@2
   displayName: 'Publish the project - $(buildConfiguration)'
   inputs:
