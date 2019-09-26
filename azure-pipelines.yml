@@ -76,6 +76,7 @@ steps:
     Contents: |
      **\WheelOfFortune\bin\**\*
      **\WheelOfFortune\bin\**\*
+     
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: DotNetCoreCLI@2
@@ -88,5 +89,7 @@ steps:
     zipAfterPublish: true
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: drop'
-  condition: succeeded()
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: 'drop' 
+    publishLocation: 'Container' # Options: container, filePath
