@@ -19,7 +19,7 @@ namespace WOFClassLib
         private int totalPlayers;
         private HashSet<char> guessedLetters;
         private HashSet<char> guessedVowels;
-        private const int SLEEPTIME = 750;
+        private const int SLEEPTIME = 1500;
 
         public Game()
         {
