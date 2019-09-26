@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace WOFClassLib
 {
@@ -18,6 +19,7 @@ namespace WOFClassLib
         private int totalPlayers;
         private HashSet<char> guessedLetters;
         private HashSet<char> guessedVowels;
+        private const int SLEEPTIME = 750;
 
         public Game()
         {
@@ -46,10 +48,10 @@ namespace WOFClassLib
 
             for (int i = 0; i < totalPlayers; i++)
             {
-                Console.WriteLine("Hey player {0} What's your name? ", i + 1);
+                Console.WriteLine("\nHey player {0} What's your name? ", i + 1);
                 players.Add(new Player(Console.ReadLine())); // adds a player obj to list
             }
-            Console.WriteLine("Alright, starting with {0} player(s)!", totalPlayers);
+            Console.WriteLine("\nAlright, starting with {0} player(s)!", totalPlayers);
         }
 
         /// <summary>
@@ -136,7 +138,7 @@ namespace WOFClassLib
                     winner = players[i];
                 }
             }
-            Console.WriteLine("{0} is the winner with ${1}", winner.Name, winner.TotalMoney);
+            Console.WriteLine("\n{0} is the winner with ${1}", winner.Name, winner.TotalMoney);
         }
 
         /// <summary>
@@ -150,6 +152,7 @@ namespace WOFClassLib
             PrintPuzzle();
             bool guessCorrect = false, skipBankrupt = false;
             SpinAction(player, ref guessCorrect, ref skipBankrupt);
+            Thread.Sleep(SLEEPTIME);
             Console.Clear();
             ActionLoop:
             PrintPlayerRoundMoney(player);
@@ -161,22 +164,23 @@ namespace WOFClassLib
                     if (guessCorrect)
                     {
                         NextAction(player, ref guessCorrect, ref skipBankrupt);
+                        Thread.Sleep(SLEEPTIME);
                         Console.Clear();
                         goto ActionLoop;
                     }
                     else
                     {
-                        Console.WriteLine("Your guess was wrong... Let's move on to the next player.");
+                        Console.WriteLine("\nYour guess was wrong... Let's move on to the next player.");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("YAYYYY! You solved it!");     
+                    Console.WriteLine("\nYAYYYY! You solved it!");     
                 }
             }
             else
             {
-                System.Console.WriteLine("Let's move on to the next player.");
+                System.Console.WriteLine("\nLet's move on to the next player.");
             }
         }
 
@@ -201,7 +205,7 @@ namespace WOFClassLib
             }
             else
             {
-                System.Console.WriteLine("You spun ${0}!", spinValue);
+                System.Console.WriteLine("\nYou spun ${0}!", spinValue);
                 char userLetter = AskForLetter(player);
                 int matches = player.GuessLetter(userLetter, puzzle, spinValue);
                 if (matches > 0)
@@ -223,12 +227,12 @@ namespace WOFClassLib
         /// <returns>bool if action was a success</returns>
         private void NextAction(Player player, ref bool guessCorrect, ref bool skipBankrupt)
         {
-            Console.WriteLine("Since you guessed correctly, you can make another spin or solve!");
+            Console.WriteLine("\nSince you guessed correctly, you can make another spin or solve!");
             int userChoice;
             bool actionValid = false;
             do
             {
-                Console.WriteLine("1 to Spin or 2 to Solve");
+                Console.WriteLine("\n1 to Spin or 2 to Solve");
                 string input = Console.ReadLine();
                 actionValid = int.TryParse(input, out userChoice);
             } while (!actionValid || (userChoice != 1 && userChoice != 2));
@@ -255,22 +259,22 @@ namespace WOFClassLib
             bool valid = false;
             do
             {
-                System.Console.Write("Guess a single letter: ");
+                System.Console.Write("\nGuess a single letter: ");
                 valid = char.TryParse(Console.ReadLine(), out letter);
                 if (guessedLetters.Contains(letter))
                 {
-                    System.Console.WriteLine("'{0}' was already guessed!", letter);
+                    System.Console.WriteLine("\n'{0}' was already guessed!", letter);
                 }
                 else if (!guessedLetters.Contains(letter) && IsVowel(letter))
                 {
                     if (!player.CanBuyVowel())
                     {
-                        System.Console.WriteLine("You can't buy '{0}'. You're broke AF!!!", letter);
+                        System.Console.WriteLine("\nYou can't buy '{0}'. You're broke AF!!!", letter);
                         valid = false;
                     }
                     else
                     {
-                        System.Console.WriteLine("You bought '{0}'", letter);
+                        System.Console.WriteLine("\nYou bought '{0}'", letter);
                         guessedVowels.Add(letter);
                         player.PurchaseVowel();
                     }
@@ -288,7 +292,7 @@ namespace WOFClassLib
         /// <returns>a string for user to solve</returns>
         private string AskForStringSolve()
         {
-            System.Console.Write("What is your guess? ");
+            System.Console.Write("\nWhat is your guess? ");
             string guess = Console.ReadLine();
             return guess;
         }
